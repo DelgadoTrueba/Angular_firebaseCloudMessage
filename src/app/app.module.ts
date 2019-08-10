@@ -6,6 +6,8 @@ import { AppMdModule } from './app-md.module';
 
 import { AppComponent } from './app.component';
 import { UserCardComponent } from './user-card/user-card.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { UserCardComponent } from './user-card/user-card.component';
     BrowserAnimationsModule,
     AppRoutingModule,
 
-    AppMdModule
+    AppMdModule,
+
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [],
   bootstrap: [AppComponent]
