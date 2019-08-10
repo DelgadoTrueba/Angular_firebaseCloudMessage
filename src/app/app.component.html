@@ -8,4 +8,8 @@
 
 <router-outlet></router-outlet>
 
+<button (click)="subscribeToNotifications()">Subscribe</button>
+
+<p>FCM: {{ message | async | json }}</p>
+
 <h1>Version V1 is runnning ...</h1>

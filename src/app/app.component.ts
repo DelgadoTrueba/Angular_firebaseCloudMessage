@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { SwPush } from '@angular/service-worker';
+import { MessagingService } from './messaging.service';
+
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'angularFCM';
+
+  message;
+
+  constructor(private msgService: MessagingService) {}
+
+  ngOnInit() {
+    this.msgService.getPermission()
+    this.msgService.receiveMessage()
+    this.message = this.msgService.currentMessage
+  }
+
+  subscribeToNotifications() {
+  
+  }
+
 }
