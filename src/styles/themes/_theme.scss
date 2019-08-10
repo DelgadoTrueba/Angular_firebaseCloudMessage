@@ -1,0 +1,112 @@
+$mat-primary: (
+    50 : #e0f3fe,
+    100 : #b3e0fd,
+    200 : #80cbfc,
+    300 : #4db6fa,
+    400 : #26a7f9,
+    500 : #0097f8,
+    600 : #008ff7,
+    700 : #0084f6,
+    800 : #007af5,
+    900 : #0069f3,
+    A100 : #ffffff,
+    A200 : #e6efff,
+    A400 : #b3cfff,
+    A700 : #9abfff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$mat-accent: (
+    50 : #e0edf8,
+    100 : #b3d2ee,
+    200 : #80b5e2,
+    300 : #4d97d6,
+    400 : #2680ce,
+    500 : #006ac5,
+    600 : #0062bf,
+    700 : #0057b8,
+    800 : #004db0,
+    900 : #003ca3,
+    A100 : #cedcff,
+    A200 : #9bb8ff,
+    A400 : #6893ff,
+    A700 : #4e81ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$mat-warn: (
+    50 : #fce8e1,
+    100 : #f7c7b4,
+    200 : #f2a182,
+    300 : #ed7b4f,
+    400 : #e95f2a,
+    500 : #e54304,
+    600 : #e23d03,
+    700 : #de3403,
+    800 : #da2c02,
+    900 : #d31e01,
+    A100 : #fffbfb,
+    A200 : #ffccc8,
+    A400 : #ff9e95,
+    A700 : #ff867b,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+@import '~@angular/material/theming';
+@include mat-core();
+
+// define 3 theme color
+// mat-palette accepts $palette-name, main, lighter and darker variants
+$my-theme-primary: mat-palette($mat-primary);
+$my-theme-accent: mat-palette($mat-accent);
+$my-theme-warn: mat-palette($mat-warn);
+
+// create theme (use mat-dark-theme for themes with dark backgrounds)
+$my-theme: mat-light-theme($my-theme-primary, $my-theme-accent, $my-theme-warn);
+
+@include angular-material-theme($my-theme); 

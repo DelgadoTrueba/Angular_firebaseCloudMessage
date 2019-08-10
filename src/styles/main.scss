@@ -1,0 +1,22 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'abstracts/variables';
+@import 'abstracts/functions';
+@import 'abstracts/mixins';
+@import 'abstracts/placeholders';
+
+@import 'base/reset';
+@import 'base/typography';
+
+@import 'layout/grid';
+
+@import 'themes/theme';
+
+@import 'shame';
+
+.mat-success{
+    @include mat-success;
+}
+  
+.mat-update{
+    @include mat-update;
+}

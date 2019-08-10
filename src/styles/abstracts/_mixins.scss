@@ -1,0 +1,11 @@
+@import "abstracts/variables";
+
+@mixin mat-success {
+    color: white;
+    background: $success ;
+}
+
+@mixin mat-update {
+    color: white;
+    background: $update ;
+}
