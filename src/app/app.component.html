@@ -1,7 +1,7 @@
-<mat-toolbar color="primary">  
+<mat-toolbar color="primary">
   <mat-toolbar-row>
     <span>Firebase Push Notification</span>
-    <img src="https://cdn4.iconfinder.com/data/icons/google-i-o-2016/512/google_firebase-2-512.png" 
+    <img src="https://cdn4.iconfinder.com/data/icons/google-i-o-2016/512/google_firebase-2-512.png"
           class="responsive">
   </mat-toolbar-row>
 </mat-toolbar>
@@ -10,6 +10,6 @@
 
 <button (click)="subscribeToNotifications()">Subscribe</button>
 
-<p>FCM: {{ message | async | json }}</p>
+<p>FCM: {{ message$ | async | json }}</p>
 
 <h1>Version V1 is runnning ...</h1>

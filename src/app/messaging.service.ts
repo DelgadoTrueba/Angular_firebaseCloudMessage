@@ -1,55 +1,107 @@
-import { Injectable }          from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
-import { AngularFireAuth }     from 'angularfire2/auth';
-import * as firebase from 'firebase';
+import { Injectable, ɵConsole } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs'
-import { take } from 'rxjs/operators';
+import * as firebase from 'firebase/app';
+import 'firebase/messaging';
+
+import { environment } from '../environments/environment';
+import { BehaviorSubject, Subject } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessagingService {
 
-  messaging = firebase.messaging()
-  currentMessage = new BehaviorSubject(null)
+  messaging;
+  _currentMessage = new Subject();
 
-  constructor(
-    private db: AngularFireDatabase,
-    private afAuth: AngularFireAuth
-  ) { }
+  get currentMessage() {
+    return this._currentMessage.asObservable();
+  }
+
+  constructor() {
+
+    const app = firebase.initializeApp(environment.firebaseConfig);
+    this.messaging = app.messaging();
+
+    /*
+    navigator.serviceWorker
+    .register('/firebase-messaging-sw.js')
+    .then((registration) => {
+      firebase.messaging().useServiceWorker(registration);
+    });
+    */
+  }
+
+  getPermission() {
+
+    Notification.requestPermission()
+      .then((permission) => {
+
+        return new Promise((resolve, reject) => {
+          if (permission === 'granted') {
+            resolve(permission);
+          } else {
+            reject(permission);
+          }
+        });
+
+      })
+      .then( () => {
+        console.log('Notification permission granted.');
+      })
+      .catch((err) => {
+        console.log('Unable to get permission to notify.', err);
+      });
+
+  }
+
+  getToken() {
+
+    this.messaging.getToken()
+      .then((currentToken) => {
+        if (currentToken) {
+          // sendTokenToServer(currentToken);
+          // updateUIForPushEnabled(currentToken);
+          console.log(currentToken);
+        } else {
+          // Show permission request.
+          console.log('No Instance ID token available. Request permission to generate one.');
+          // Show permission UI.
+          // updateUIForPushPermissionRequired();
+          // setTokenSentToServer(false);
+        }
+      }).catch((err) => {
+        console.log('An error occurred while retrieving token. ');
+        // showToken('Error retrieving Instance ID token. ', err);
+        // setTokenSentToServer(false);
+      });
+
+  }
 
 
   updateToken(token) {
-    this.afAuth.authState.pipe(take(1)).subscribe(user => {
+    console.log('UpdateToken');
+    /*
+    this.afAuth.authState.take(1).subscribe(user => {
       if (!user) return;
 
       const data = { [user.uid]: token }
       this.db.object('fcmTokens/').update(data)
     })
+    */
   }
 
-  getPermission() {
-      this.messaging.requestPermission()
-      .then(() => {
-        console.log('Notification permission granted.');
-        return this.messaging.getToken()
-      })
-      .then(token => {
-        console.log(token)
-        this.updateToken(token)
-      })
-      .catch((err) => {
-        console.log('Unable to get permission to notify.', err);
-      });
-    }
+  receiveMessage(){
+    // Handle incoming messages. Called when:
+    // - a message is received while the app has focus
+    // - the user clicks on an app notification created by a service worker
+    //   `messaging.setBackgroundMessageHandler` handler.
+    this.messaging.onMessage((payload) => {
+      console.log('Message received. ', payload);
+      this._currentMessage.next(payload);
+    });
+  }
 
-    receiveMessage() {
-       this.messaging.onMessage((payload) => {
-        console.log("Message received. ", payload);
-        this.currentMessage.next(payload)
-      });
-
-    }
 
 }
