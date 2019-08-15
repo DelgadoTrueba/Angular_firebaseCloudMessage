@@ -39,6 +39,10 @@ export class MessagingService {
     return permission === 'granted';
   }
 
+  public isNotSupported(permission: string): boolean {
+    return permission === 'not-supported';
+  }
+
   public async enabledNotification() {
     let permission = await this.askForPermissionToReceiveNotifications();
 
@@ -51,6 +55,11 @@ export class MessagingService {
   }
 
   private askForPermissionToReceiveNotifications() {
+    if (!Notification) {
+      this._state.next('not-supported');
+      return Promise.resolve('not-supported');
+    }
+
     return Notification.requestPermission()
       .then( permission => {
         console.log(`Notification Permission: ${permission}`);

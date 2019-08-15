@@ -1,4 +1,12 @@
 .wrapper {
   display: flex;
   justify-content: space-between;
+  width: 100%;
+}
+
+.text{
+  padding: 2%;
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
+  font-size: 0.75em;
+  padding-top: 0%;
 }

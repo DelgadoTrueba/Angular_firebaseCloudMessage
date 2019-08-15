@@ -9,6 +9,7 @@ import { MessagingService } from '../messaging.service';
 export class NotificationComponent implements OnInit {
 
   notificationIsChecked;
+  notificationSupported = true;
 
   constructor(private notification: MessagingService) {
 
@@ -17,6 +18,12 @@ export class NotificationComponent implements OnInit {
   ngOnInit() {
 
     this.notification.state.subscribe( permission => {
+
+      if (this.notification.isNotSupported(permission)) {
+        this.notificationSupported = false;
+        return;
+      }
+
       if (this.notification.isDefault(permission) || this.notification.isDenied(permission)) {
         this.notificationIsChecked = false;
       }

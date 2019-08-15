@@ -1,21 +1,46 @@
 <!--
   Debe ir incluido en un <mat-list-item class="col">
 -->
-<div class="wrapper">
-  <span>Push Notification</span>
-  <div>
-    <mat-checkbox
-      [disabled]="true"
-      [checked]="notificationIsChecked"
-    >
-      Enabled
-    </mat-checkbox>
-    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-    <mat-checkbox
-      [disabled]="true"
-      [checked]="!notificationIsChecked"
-    >
-      Disabled
-    </mat-checkbox>
-  </div>
-</div>
+
+<mat-list>
+  <mat-divider></mat-divider>
+
+  <mat-list-item>
+    <div class="wrapper">
+        <span>Push Notification</span>
+        <div *ngIf="notificationSupported">
+          <mat-checkbox
+            [disabled]="true"
+            [checked]="notificationIsChecked"
+          >
+            Enabled
+          </mat-checkbox>
+          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+          <mat-checkbox
+            [disabled]="true"
+            [checked]="!notificationIsChecked"
+          >
+            Disabled
+          </mat-checkbox>
+        </div>
+        <div *ngIf="!notificationSupported">
+            <mat-checkbox
+              [disabled]="true"
+              [checked]="true"
+            >
+              Not Supported
+            </mat-checkbox>
+          </div>
+      </div>
+    </mat-list-item>
+
+  <p class="text" *ngIf="notificationSupported">
+      * You can change this configuration. Open your Browser settings and allow or block notifications from this page.
+  </p>
+
+  <p class="text" *ngIf="!notificationSupported">
+      * This Browser not supported notifications.
+  </p>
+
+  <mat-divider></mat-divider>
+</mat-list>
