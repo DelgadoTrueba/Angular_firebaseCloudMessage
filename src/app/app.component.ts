@@ -13,23 +13,12 @@ import { map } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
 
-  message$;
-
-  constructor(private msgService: MessagingService) {
+  constructor(private notification: MessagingService) {
 
   }
 
   ngOnInit() {
-    this.msgService.getPermission();
-    this.msgService.getToken();
-
-    this.msgService.receiveMessage();
-
-    this.message$ = this.msgService.currentMessage;
-  }
-
-  subscribeToNotifications() {
-
+    this.notification.enabledNotification();
   }
 
 }

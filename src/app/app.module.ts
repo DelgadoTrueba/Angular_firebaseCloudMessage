@@ -8,11 +8,13 @@ import { AppComponent } from './app.component';
 import { UserCardComponent } from './user-card/user-card.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { NotificationComponent } from './notification/notification.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserCardComponent
+    UserCardComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,

@@ -8,8 +8,25 @@
 
 <router-outlet></router-outlet>
 
-<button (click)="subscribeToNotifications()">Subscribe</button>
+<div class="row">
+  <mat-list>
+    <mat-divider></mat-divider>
+    <mat-list-item class="col">
+        <app-notification style="width: 100%"></app-notification>
+    </mat-list-item>
 
-<p>FCM: {{ message$ | async | json }}</p>
 
-<h1>Version V1 is runnning ...</h1>
+          <p class="text">
+              * You can change this configuration. Open your Browser settings and allow or block notifications from this page
+          </p>
+
+
+    <mat-divider></mat-divider>
+  </mat-list>
+</div>
+
+<div class="row">
+    <div class="col">
+        <p>Version V1 is runnning ...</p>
+    </div>
+</div>

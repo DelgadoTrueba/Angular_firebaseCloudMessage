@@ -1,4 +1,26 @@
 .responsive {
-    width: auto;
-    height: 100%;
+  width: auto;
+  height: 100%;
+}
+
+.row {
+  width: 60%;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .row {
+    width: 100%;
   }
+}
+
+.col{
+  padding: 2%;
+}
+
+.text{
+  padding: 2%;
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
+  font-size: 0.75em;
+  padding-top: 0%;
+}
