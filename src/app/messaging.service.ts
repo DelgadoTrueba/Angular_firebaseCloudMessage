@@ -21,10 +21,13 @@ export class MessagingService {
   }
 
   constructor() {
-    const app = firebase.initializeApp(environment.firebaseConfig);
-    this.messaging = app.messaging();
-
-    this._state = new BehaviorSubject( Notification.permission );
+    try {
+      const app = firebase.initializeApp(environment.firebaseConfig);
+      this.messaging = app.messaging();
+      this._state = new BehaviorSubject( Notification.permission );
+    } catch (err) {
+      this._state = new BehaviorSubject( 'not-supported' );
+    }
   }
 
   public isDefault(permission: string): boolean {
@@ -55,11 +58,6 @@ export class MessagingService {
   }
 
   private askForPermissionToReceiveNotifications() {
-    if (!Notification) {
-      this._state.next('not-supported');
-      return Promise.resolve('not-supported');
-    }
-
     return Notification.requestPermission()
       .then( permission => {
         console.log(`Notification Permission: ${permission}`);
