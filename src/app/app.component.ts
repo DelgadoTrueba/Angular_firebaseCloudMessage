@@ -13,12 +13,12 @@ import { map } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private notification: MessagingService) {
+  constructor() {
 
   }
 
   ngOnInit() {
-    this.notification.enabledNotification();
+
   }
 
 }

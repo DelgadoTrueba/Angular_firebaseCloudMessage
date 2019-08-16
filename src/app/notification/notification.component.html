@@ -8,38 +8,49 @@
   <mat-list-item>
     <div class="wrapper">
         <span>Push Notification</span>
-        <div *ngIf="notificationSupported">
+
+        <div *ngIf="ui.notificationGranted || ui.notificationDenied">
           <mat-checkbox
             [disabled]="true"
-            [checked]="notificationIsChecked"
+            [checked]="ui.notificationGranted "
           >
             Enabled
           </mat-checkbox>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <mat-checkbox
             [disabled]="true"
-            [checked]="!notificationIsChecked"
+            [checked]="ui.notificationDenied"
           >
             Disabled
           </mat-checkbox>
         </div>
-        <div *ngIf="!notificationSupported">
+
+        <div *ngIf="ui.notificationNotSupported">
             <mat-checkbox
               [disabled]="true"
               [checked]="true"
             >
               Not Supported
             </mat-checkbox>
-          </div>
+        </div>
+
+        <div *ngIf="ui.notificationDefault">
+          <button mat-stroked-button color="primary" (click)="enabledNotification()" >Sign In.</button>
+        </div>
+
       </div>
     </mat-list-item>
 
-  <p class="text" *ngIf="notificationSupported">
+  <p class="text" *ngIf="ui.notificationGranted || ui.notificationDenied">
       * You can change this configuration. Open your Browser settings and allow or block notifications from this page.
   </p>
 
-  <p class="text" *ngIf="!notificationSupported">
+  <p class="text" *ngIf="ui.notificationNotSupported">
       * This Browser not supported notifications.
+  </p>
+
+  <p class="text" *ngIf="ui.notificationDefault">
+    * Sign in to enabled the notification.
   </p>
 
   <mat-divider></mat-divider>

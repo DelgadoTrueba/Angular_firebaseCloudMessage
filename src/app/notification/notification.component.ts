@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessagingService } from '../messaging.service';
+import { map, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-notification',
@@ -8,8 +9,8 @@ import { MessagingService } from '../messaging.service';
 })
 export class NotificationComponent implements OnInit {
 
-  notificationIsChecked;
-  notificationSupported = true;
+  ui;
+
 
   constructor(private notification: MessagingService) {
 
@@ -17,22 +18,44 @@ export class NotificationComponent implements OnInit {
 
   ngOnInit() {
 
-    this.notification.state.subscribe( permission => {
-
+    this.notification.state.subscribe(permission => {
       if (this.notification.isNotSupported(permission)) {
-        this.notificationSupported = false;
-        return;
+        this.ui = {
+            notificationNotSupported: true,
+            notificationDefault: false,
+            notificationDenied: false,
+            notificationGranted: false
+          };
       }
-
-      if (this.notification.isDefault(permission) || this.notification.isDenied(permission)) {
-        this.notificationIsChecked = false;
+      if (this.notification.isDefault(permission)) {
+        this.ui = {
+            notificationNotSupported: false,
+            notificationDefault: true,
+            notificationDenied: false,
+            notificationGranted: false
+          };
       }
-
       if (this.notification.isGranted(permission)) {
-        this.notificationIsChecked = true;
+        this.ui = {
+            notificationNotSupported: false,
+            notificationDefault: false,
+            notificationDenied: false,
+            notificationGranted: true
+          };
+      }
+      if (this.notification.isDenied(permission)) {
+        this.ui = {
+            notificationNotSupported: false,
+            notificationDefault: false,
+            notificationDenied: true,
+            notificationGranted: false
+          };
       }
     });
+  }
 
+  enabledNotification() {
+    this.notification.enabledNotification();
   }
 
 }
