@@ -41,17 +41,19 @@
       </div>
     </mat-list-item>
 
-  <p class="text" *ngIf="ui.notificationGranted || ui.notificationDenied">
-      * You can change this configuration. Open your Browser settings and allow or block notifications from this page.
-  </p>
+    <mat-list-item>
+      <p class="text" *ngIf="ui.notificationGranted || ui.notificationDenied">
+          * You can change this configuration. Open your Browser settings and allow or block notifications from this page.
+      </p>
 
-  <p class="text" *ngIf="ui.notificationNotSupported">
-      * This Browser not supported notifications.
-  </p>
+      <p class="text" *ngIf="ui.notificationNotSupported">
+          * This Browser not supported notifications.
+      </p>
 
-  <p class="text" *ngIf="ui.notificationDefault">
-    * Sign in to enabled the notification.
-  </p>
+      <p class="text" *ngIf="ui.notificationDefault">
+        * Sign in to enabled the notification.
+      </p>
+    </mat-list-item>
 
   <mat-divider></mat-divider>
 </mat-list>
