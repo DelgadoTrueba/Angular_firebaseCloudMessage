@@ -10,13 +10,15 @@ import { map, filter } from 'rxjs/operators';
 export class NotificationComponent implements OnInit {
 
   ui;
-
+  token;
 
   constructor(private notification: MessagingService) {
 
   }
 
   ngOnInit() {
+
+    this.notification.token$.subscribe(token => this.token = token );
 
     this.notification.state.subscribe(permission => {
       if (this.notification.isNotSupported(permission)) {

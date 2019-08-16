@@ -5,7 +5,7 @@ import 'firebase/messaging';
 
 import { environment } from '../environments/environment';
 
-import { from, throwError, Observable, BehaviorSubject } from 'rxjs';
+import { from, throwError, Observable, BehaviorSubject, Subject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
@@ -18,6 +18,7 @@ export class MessagingService {
 
   // getToken return null
   private token: string = null;
+  public token$: Subject<string>;
 
   public get state() {
     return this._state.asObservable();
@@ -28,6 +29,7 @@ export class MessagingService {
       const app = firebase.initializeApp(environment.firebaseConfig);
       this.messaging = app.messaging();
       this._state = new BehaviorSubject(Notification.permission);
+      this.token$ = new Subject();
 
       this.messaging.onTokenRefresh(() => {
         this.getToken().subscribe( tokenRefresh => {
@@ -54,6 +56,7 @@ export class MessagingService {
         }
         //añadir token;
         this.token = tokenRefresh;
+        this.token$.next(tokenRefresh);
         this.listenNotification();
       });
     }

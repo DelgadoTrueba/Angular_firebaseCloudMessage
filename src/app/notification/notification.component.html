@@ -45,6 +45,10 @@
       <p class="text" *ngIf="ui.notificationGranted || ui.notificationDenied">
           * You can change this configuration. Open your Browser settings and allow or block notifications from this page.
       </p>
+      <br>
+      <p class="text" *ngIf="ui.notificationGranted || ui.notificationDenied">
+        Token: {{token}}
+      </p>
 
       <p class="text" *ngIf="ui.notificationNotSupported">
           * This Browser not supported notifications.
