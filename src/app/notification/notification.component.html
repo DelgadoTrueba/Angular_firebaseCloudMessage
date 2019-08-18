@@ -5,69 +5,12 @@
 <mat-list>
   <mat-divider></mat-divider>
 
-  <mat-list-item>
-    <div class="wrapper">
-        <span>Push Notification</span>
-
-        <div *ngIf="ui.notificationDenied">
-          <mat-checkbox
-            [disabled]="true"
-            [checked]="false"
-          >
-            Enabled
-          </mat-checkbox>
-          <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-          <mat-checkbox
-            [disabled]="true"
-            [checked]="true"
-          >
-            Disabled
-          </mat-checkbox>
-        </div>
-
-        <div *ngIf="ui.notificationGranted">
-          <mat-slide-toggle *ngIf="notification"
-            [checked]="true"
-            (click)="toggleNotification()"
-          >
-          </mat-slide-toggle>
-
-          <mat-slide-toggle *ngIf="!notification"
-            [checked]="false"
-            (click)="toggleNotification()"
-          >
-          </mat-slide-toggle>
-        </div>
-
-        <div *ngIf="ui.notificationNotSupported">
-            <mat-checkbox
-              [disabled]="true"
-              [checked]="true"
-            >
-              Not Supported
-            </mat-checkbox>
-        </div>
-
-        <div *ngIf="ui.notificationDefault">
-          <button mat-stroked-button color="primary" (click)="enabledNotification()" >Sign In.</button>
-        </div>
-
-      </div>
-    </mat-list-item>
-
-    <mat-list-item>
-      <p class="text" *ngIf="ui.notificationGranted || ui.notificationDenied">
-          * You can change this configuration. Open your Browser settings and allow or block notifications from this page.
-      </p>
-
-      <p class="text" *ngIf="ui.notificationNotSupported">
-          * This Browser not supported notifications.
-      </p>
-
-      <p class="text" *ngIf="ui.notificationDefault">
-        * Sign in to enabled the notification.
-      </p>
-    </mat-list-item>
+  <div [ngSwitch]="permission.permission">
+    <default-notification *ngSwitchCase="defaultNotification()"></default-notification>
+    <not-supported-notification *ngSwitchCase="notSupportedNotification()"></not-supported-notification>
+    <granted-notification *ngSwitchCase="grantedNotification()"></granted-notification>
+    <denied-notification  *ngSwitchCase="deniedNotification()"></denied-notification >
+  </div>
 
   <mat-divider></mat-divider>
 </mat-list>

@@ -16,7 +16,15 @@
 .mat-success{
     @include mat-success;
 }
-  
+
 .mat-update{
     @include mat-update;
+}
+
+.text{
+  padding: 2%;
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
+  font-size: 0.75em;
+  padding-top: 0%;
+  text-align: center;
 }

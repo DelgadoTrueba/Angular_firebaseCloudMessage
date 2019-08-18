@@ -9,12 +9,20 @@ import { UserCardComponent } from './user-card/user-card.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { NotificationComponent } from './notification/notification.component';
+import { DefaultNotificationComponent } from './notification/default-notification/default-notification.component';
+import { NotSupportedNotificationComponent } from './notification/not-supported-notification/not-supported-notification.component';
+import { DeniedNotificationComponent } from './notification/denied-notification/denied-notification.component';
+import { GrantedNotificationComponent } from './notification/granted-notification/granted-notification.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UserCardComponent,
-    NotificationComponent
+    NotificationComponent,
+    DefaultNotificationComponent,
+    NotSupportedNotificationComponent,
+    DeniedNotificationComponent,
+    GrantedNotificationComponent
   ],
   imports: [
     BrowserModule,

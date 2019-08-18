@@ -10,76 +10,32 @@ import { NotificationService } from '../notification.service';
 })
 export class NotificationComponent implements OnInit {
 
-  ui;
-  notification: boolean;
+  permission;
 
   constructor(
-    private pushNotification: MessagingService,
     private Notification: NotificationService
     ) { }
 
   ngOnInit() {
-
-    this.Notification.permission.subscribe( notification => {
-      console.log(notification);
-      if (this.Notification.NOT_SUPPORTED === notification.permission) {
-        this.ui = {
-            notificationNotSupported: true,
-            notificationDefault: false,
-            notificationDenied: false,
-            notificationGranted: false
-          };
-      }
-      if (this.Notification.PERMISSION_DEFAULT === notification.permission) {
-        this.ui = {
-            notificationNotSupported: false,
-            notificationDefault: true,
-            notificationDenied: false,
-            notificationGranted: false
-          };
-      }
-      if (this.Notification.PERMISSION_GRANTED === notification.permission) {
-        this.ui = {
-            notificationNotSupported: false,
-            notificationDefault: false,
-            notificationDenied: false,
-            notificationGranted: true
-          };
-        if (notification.notifiable) {
-          this.notification = true;
-          this.pushNotification.enabledNotification().subscribe();
-        } else {
-          this.notification = false;
-          this.pushNotification.disabledNotification().subscribe();
-        }
-      }
-      if (this.Notification.PERMISSION_DENIED === notification.permission) {
-        this.ui = {
-            notificationNotSupported: false,
-            notificationDefault: false,
-            notificationDenied: true,
-            notificationGranted: false
-          };
-      }
+    this.Notification.permission.subscribe( permission => {
+      this.permission = permission;
     });
   }
 
-  toggleNotification() {
-    if(this.ui.notificationGranted) {
-      if (this.notification) {
-        this.disabledNotification();
-      } else {
-        this.enabledNotification();
-      }
-    }
+  defaultNotification() {
+    return this.Notification.PERMISSION_DEFAULT;
   }
 
-  enabledNotification() {
-    this.Notification.setNotificationPermission(true);
+  notSupportedNotification() {
+    return this.Notification.NOT_SUPPORTED;
   }
 
-  disabledNotification() {
-    this.Notification.setNotificationPermission(false);
+  grantedNotification() {
+    return this.Notification.PERMISSION_GRANTED;
+  }
+
+  deniedNotification() {
+    return this.Notification.PERMISSION_DENIED;
   }
 
 }
