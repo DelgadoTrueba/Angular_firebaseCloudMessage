@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { MessagingService } from 'src/app/messaging.service';
 import { NotificationService } from 'src/app/notification.service';
 
 @Component({
   selector: 'granted-notification',
   templateUrl: './granted-notification.component.html',
-  styleUrls: ['./granted-notification.component.scss']
+  styleUrls: ['./granted-notification.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GrantedNotificationComponent implements OnInit {
 
-  permission;
+ @Input() notifiable;
 
   constructor(
     private pushNotification: MessagingService,
@@ -17,24 +18,19 @@ export class GrantedNotificationComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.Notification.permission.subscribe( permission => {
-      this.permission = permission;
-      if (permission.notifiable) {
-        this.pushNotification.enabledNotification().subscribe();
-      } else {
-        this.pushNotification.disabledNotification().subscribe();
-      }
-    });
+    if (this.notifiable) {
+      this.pushNotification.enabledNotification().subscribe();
+    } else {
+      this.pushNotification.disabledNotification().subscribe();
+    }
   }
 
   toggleNotification() {
-    if(this.permission.notificationGranted) {
-      if (this.permission.notifiable) {
+      if (this.notifiable) {
         this.disabledNotification();
       } else {
         this.enabledNotification();
       }
-    }
   }
 
   enabledNotification() {

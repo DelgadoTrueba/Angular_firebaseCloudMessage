@@ -9,7 +9,11 @@
     <div [ngSwitch]="permission.permission">
       <default-notification *ngSwitchCase="defaultNotification()"></default-notification>
       <not-supported-notification *ngSwitchCase="notSupportedNotification()"></not-supported-notification>
-      <granted-notification *ngSwitchCase="grantedNotification()"></granted-notification>
+      <granted-notification
+        *ngSwitchCase="grantedNotification()"
+        [notifiable]="permission.notifiable"
+      >
+      </granted-notification>
       <denied-notification  *ngSwitchCase="deniedNotification()"></denied-notification >
     </div>
   </div>
