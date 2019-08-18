@@ -6,7 +6,7 @@ import 'firebase/messaging';
 import { environment } from '../environments/environment';
 
 import { from, throwError, Observable, BehaviorSubject, Subject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,112 +14,91 @@ import { catchError, tap } from 'rxjs/operators';
 export class MessagingService {
 
   private messaging;
-  private _state: BehaviorSubject<string>;
 
   // getToken return null
   private token: string = null;
-  public token$: Subject<string>;
-
-  public get state() {
-    return this._state.asObservable();
-  }
 
   constructor() {
-    try {
+    if (this.isSupported()) {
+
       const app = firebase.initializeApp(environment.firebaseConfig);
       this.messaging = app.messaging();
-      this._state = new BehaviorSubject(Notification.permission);
-      this.token$ = new Subject();
 
       this.messaging.onTokenRefresh(() => {
-        this.getToken().subscribe( tokenRefresh => {
-          if (this.token !== null){
-            //eliminar token
-          }
-          //añadir token;
-          this.token = tokenRefresh;
-        });
-      });
-
-    } catch (err) {
-      this._state = new BehaviorSubject('not-supported');
-    }
-  }
-
-  public async enabledNotification() {
-    let permission = await this.askForPermissionToReceiveNotifications();
-
-    if (this.isGranted(permission)) {
-      this.getToken().subscribe( (tokenRefresh) => {
-        if (this.token !== null){
-          //eliminar token
-        }
-        //añadir token;
-        this.token = tokenRefresh;
-        this.token$.next(tokenRefresh);
-        this.listenNotification();
+        this.enabledNotification().subscribe( tokenRefresh => console.log('tokenRefresh: ' + tokenRefresh));
       });
     }
   }
 
-  public isDefault(permission: string): boolean {
-    return permission === 'default';
-  }
+  public disabledNotification(): Observable<string> {
 
-  public isDenied(permission: string): boolean {
-    return permission === 'denied';
-  }
+    let deleteTokenPromise;
 
-  public isGranted(permission: string): boolean {
-    return permission === 'granted';
-  }
+    if (this.token !== null) {
+      deleteTokenPromise = this.messaging.deleteToken(this.token)
+        .then( isDeleted =>{
+          console.log('deleteTokenPromise: ' + this.token);
+          Promise.resolve(this.token);
+        })
+        .catch( err => Promise.reject(err) );
+    } else {
+      deleteTokenPromise = Promise.resolve(null);
+    }
 
-  public isNotSupported(permission: string): boolean {
-    return permission === 'not-supported';
-  }
-
-  private askForPermissionToReceiveNotifications() {
-    return Notification.requestPermission()
-      .then( permission => {
-        console.log(`Notification Permission: ${permission}`);
-        this._state.next(permission);
-        return Promise.resolve(permission);
-      });
-  }
-
-  private getToken(): Observable<string> {
-
-    const tokenPromise = this.messaging.getToken()
-      .then((currentToken) => {
-        return new Promise((resolve, reject) => {
-          if (currentToken) {
-            console.log('TOKEN: ' + currentToken);
-            resolve(currentToken);
-          } else {
-            console.log('TOKEN: ' + currentToken);
-            reject(
-              new Error('No Instance ID token available. Request permission to generate one.')
-            );
-          }
-      });
-    });
-
-    return from<string>(tokenPromise)
+    return from<string>(deleteTokenPromise)
       .pipe(
-        catchError( err => {
-          return throwError(err);
+        filter(token => token !== null),
+        tap(deletedToken => {
+          this.token = null;
+          console.log('Delete token del server');
+          console.log('Dejar de escuchar');
         })
       );
   }
 
-  private listenNotification() {
+  public enabledNotification(): Observable<string> {
+
+    const getTokenPromise = this.messaging.getToken()
+      .then((currentToken) => {
+        return new Promise((resolve, reject) => {
+          if (currentToken) {
+            console.log('getTokenPromise: ' + currentToken);
+            resolve(currentToken);
+          } else {
+            console.log('getTokenPromise: ' + currentToken);
+            reject(
+              new Error('No Instance ID token available. Request permission to generate one.')
+            );
+          }
+      })
+      .catch( err => Promise.reject(err) );
+    });
+
+    return from<string>(getTokenPromise)
+      .pipe(
+        tap(newToken => {
+          if (this.token === null) {
+            this.token = newToken;
+            console.log('Enviar token a server');
+            this.listenNotification();
+          }
+        })
+      );
+  }
+
+  public listenNotification() {
     // Handle incoming messages. Called when:
     // - a message is received while the app has focus
     // - the user clicks on an app notification created by a service worker.
+    console.log('listenNotification');
     this.messaging.onMessage((payload) => {
       console.log('Message received. ', payload);
     });
 
+  }
+
+  public isSupported() {
+    return firebase.messaging.isSupported();
   }
 
 }

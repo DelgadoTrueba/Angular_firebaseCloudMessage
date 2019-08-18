@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessagingService } from '../messaging.service';
 import { map, filter } from 'rxjs/operators';
+import { NotificationService } from '../notification.service';
 
 @Component({
   selector: 'app-notification',
@@ -10,18 +11,18 @@ import { map, filter } from 'rxjs/operators';
 export class NotificationComponent implements OnInit {
 
   ui;
-  token;
+  notification: boolean;
 
-  constructor(private notification: MessagingService) {
-
-  }
+  constructor(
+    private pushNotification: MessagingService,
+    private Notification: NotificationService
+    ) { }
 
   ngOnInit() {
 
-    this.notification.token$.subscribe(token => this.token = token );
-
-    this.notification.state.subscribe(permission => {
-      if (this.notification.isNotSupported(permission)) {
+    this.Notification.permission.subscribe( notification => {
+      console.log(notification);
+      if (this.Notification.NOT_SUPPORTED === notification.permission) {
         this.ui = {
             notificationNotSupported: true,
             notificationDefault: false,
@@ -29,7 +30,7 @@ export class NotificationComponent implements OnInit {
             notificationGranted: false
           };
       }
-      if (this.notification.isDefault(permission)) {
+      if (this.Notification.PERMISSION_DEFAULT === notification.permission) {
         this.ui = {
             notificationNotSupported: false,
             notificationDefault: true,
@@ -37,15 +38,22 @@ export class NotificationComponent implements OnInit {
             notificationGranted: false
           };
       }
-      if (this.notification.isGranted(permission)) {
+      if (this.Notification.PERMISSION_GRANTED === notification.permission) {
         this.ui = {
             notificationNotSupported: false,
             notificationDefault: false,
             notificationDenied: false,
             notificationGranted: true
           };
+        if (notification.notifiable) {
+          this.notification = true;
+          this.pushNotification.enabledNotification().subscribe();
+        } else {
+          this.notification = false;
+          this.pushNotification.disabledNotification().subscribe();
+        }
       }
-      if (this.notification.isDenied(permission)) {
+      if (this.Notification.PERMISSION_DENIED === notification.permission) {
         this.ui = {
             notificationNotSupported: false,
             notificationDefault: false,
@@ -56,8 +64,22 @@ export class NotificationComponent implements OnInit {
     });
   }
 
+  toggleNotification() {
+    if(this.ui.notificationGranted) {
+      if (this.notification) {
+        this.disabledNotification();
+      } else {
+        this.enabledNotification();
+      }
+    }
+  }
+
   enabledNotification() {
-    this.notification.enabledNotification();
+    this.Notification.setNotificationPermission(true);
+  }
+
+  disabledNotification() {
+    this.Notification.setNotificationPermission(false);
   }
 
 }

@@ -9,20 +9,34 @@
     <div class="wrapper">
         <span>Push Notification</span>
 
-        <div *ngIf="ui.notificationGranted || ui.notificationDenied">
+        <div *ngIf="ui.notificationDenied">
           <mat-checkbox
             [disabled]="true"
-            [checked]="ui.notificationGranted "
+            [checked]="false"
           >
             Enabled
           </mat-checkbox>
           <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
           <mat-checkbox
             [disabled]="true"
-            [checked]="ui.notificationDenied"
+            [checked]="true"
           >
             Disabled
           </mat-checkbox>
+        </div>
+
+        <div *ngIf="ui.notificationGranted">
+          <mat-slide-toggle *ngIf="notification"
+            [checked]="true"
+            (click)="toggleNotification()"
+          >
+          </mat-slide-toggle>
+
+          <mat-slide-toggle *ngIf="!notification"
+            [checked]="false"
+            (click)="toggleNotification()"
+          >
+          </mat-slide-toggle>
         </div>
 
         <div *ngIf="ui.notificationNotSupported">
@@ -44,10 +58,6 @@
     <mat-list-item>
       <p class="text" *ngIf="ui.notificationGranted || ui.notificationDenied">
           * You can change this configuration. Open your Browser settings and allow or block notifications from this page.
-      </p>
-      <br>
-      <p class="text" *ngIf="ui.notificationGranted || ui.notificationDenied">
-        Token: {{token}}
       </p>
 
       <p class="text" *ngIf="ui.notificationNotSupported">
