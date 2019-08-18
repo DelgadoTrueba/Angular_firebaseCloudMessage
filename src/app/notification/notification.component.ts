@@ -10,16 +10,14 @@ import { NotificationService } from '../notification.service';
 })
 export class NotificationComponent implements OnInit {
 
-  permission;
+  permission$;
 
   constructor(
     private Notification: NotificationService
     ) { }
 
   ngOnInit() {
-    this.Notification.permission.subscribe( permission => {
-      this.permission = permission;
-    });
+    this.permission$ = this.Notification.permission;
   }
 
   defaultNotification() {

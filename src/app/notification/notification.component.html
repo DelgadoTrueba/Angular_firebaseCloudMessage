@@ -5,14 +5,14 @@
 <mat-list>
   <mat-divider></mat-divider>
 
-  <div [ngSwitch]="permission.permission">
-    <default-notification *ngSwitchCase="defaultNotification()"></default-notification>
-    <not-supported-notification *ngSwitchCase="notSupportedNotification()"></not-supported-notification>
-    <granted-notification *ngSwitchCase="grantedNotification()"></granted-notification>
-    <denied-notification  *ngSwitchCase="deniedNotification()"></denied-notification >
+  <div *ngIf="permission$ | async as permission">
+    <div [ngSwitch]="permission.permission">
+      <default-notification *ngSwitchCase="defaultNotification()"></default-notification>
+      <not-supported-notification *ngSwitchCase="notSupportedNotification()"></not-supported-notification>
+      <granted-notification *ngSwitchCase="grantedNotification()"></granted-notification>
+      <denied-notification  *ngSwitchCase="deniedNotification()"></denied-notification >
+    </div>
   </div>
-
-  <p> permission: {{permission}} </p>
 
   <mat-divider></mat-divider>
 </mat-list>
