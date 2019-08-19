@@ -6,7 +6,6 @@ import { NotificationService } from 'src/app/notification.service';
   selector: 'granted-notification',
   templateUrl: './granted-notification.component.html',
   styleUrls: ['./granted-notification.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GrantedNotificationComponent implements OnInit {
 
