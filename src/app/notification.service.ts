@@ -47,13 +47,13 @@ export class NotificationService {
       if (Notification.permission === this.PERMISSION_GRANTED) {
         object = {permission: 'granted', notifiable: isAllowed};
         localStorage.setItem('notification-permissions', JSON.stringify(object));
-        this._permission.next(object);
+        this._permission.next({... object});
       }
 
       else if (Notification.permission === this.PERMISSION_DENIED) {
         object = {permission: 'denied'};
         localStorage.setItem('notification-permissions', JSON.stringify(object));
-        this._permission.next(object);
+        this._permission.next({... object});
       }
 
       else if (Notification.permission === this.PERMISSION_DEFAULT) {
@@ -61,11 +61,11 @@ export class NotificationService {
               if (choice === this.PERMISSION_GRANTED) {
                 object = {permission: 'granted', notifiable: true};
                 localStorage.setItem('notification-permissions', JSON.stringify(object));
-                this._permission.next(object);
+                this._permission.next({... object});
               } else {
                 object = {permission: 'denied'};
                 localStorage.setItem('notification-permissions', JSON.stringify(object));
-                this._permission.next(object);
+                this._permission.next({... object});
               }
           });
       }
