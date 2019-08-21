@@ -13,6 +13,7 @@ import { DefaultNotificationComponent } from './notification/default-notificatio
 import { NotSupportedNotificationComponent } from './notification/not-supported-notification/not-supported-notification.component';
 import { DeniedNotificationComponent } from './notification/denied-notification/denied-notification.component';
 import { GrantedNotificationComponent } from './notification/granted-notification/granted-notification.component';
+import { NgIfComponent } from './ng-if/ng-if.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { GrantedNotificationComponent } from './notification/granted-notificatio
     DefaultNotificationComponent,
     NotSupportedNotificationComponent,
     DeniedNotificationComponent,
-    GrantedNotificationComponent
+    GrantedNotificationComponent,
+    NgIfComponent
   ],
   imports: [
     BrowserModule,
